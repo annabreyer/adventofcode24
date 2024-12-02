@@ -8,15 +8,17 @@ use App\Service\FileReader;
 
 class DayOneManager
 {
-    public function __construct(private readonly FileReader $fileReader)
+    public function __construct(private readonly FileReader $fileReader, private readonly string $kernelProjectDir)
     {
     }
 
-    public function getResult(): int
+    public function getResult(): array
     {
-        $input = $this->fileReader->readNewLineSeperatedFile('data/days/1/input.txt');
+        $input = $this->fileReader->readNewLineSeperatedFile($this->kernelProjectDir . '/data/days/1/input.txt');
+        $result[0] = $this->getTotalDistance($input);
+        $result[1] = $this->getSimilarityScore($input);
 
-        return $this->getTotalDistance($input);
+        return $result;
     }
 
     public function separateInTwoSortedLists(array $input): array
@@ -56,4 +58,29 @@ class DayOneManager
 
         return $result;
     }
+
+    public function getSimilarityScore($input): int
+    {
+        $locationLists = $this->separateInTwoSortedLists($input);
+        $firstList = $locationLists[0];
+        $secondList = $locationLists[1];
+        $score = 0;
+
+        $secondLocationCount = array_count_values($secondList);
+
+        foreach ($firstList as $firstLocation) {
+            if (!isset($secondLocationCount[$firstLocation])) {
+                continue;
+            }
+            $count = $secondLocationCount[$firstLocation];
+            $score += ($firstLocation * $count);
+        }
+
+        return $score;
+
+    }
+
+
+
+
 }

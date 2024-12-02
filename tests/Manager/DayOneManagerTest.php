@@ -22,7 +22,7 @@ class DayOneManagerTest extends TestCase
             '3   3',
         ];
 
-        $manager = new DayOneManager(new FileReader(new Filesystem()));
+        $manager = new DayOneManager(new FileReader(new Filesystem()), 'kernelProjectDir');
         $result = $manager->separateInTwoSortedLists($input);
         $this->assertEquals($result, [
             ['1', '2', '3', '3', '3', '4'],
@@ -32,7 +32,7 @@ class DayOneManagerTest extends TestCase
 
     public function testGetDistance(): void
     {
-        $manager = new DayOneManager(new FileReader(new Filesystem()));
+        $manager = new DayOneManager(new FileReader(new Filesystem()), 'kernelProjectDir');
         $result = $manager->getDistance('1', '3');
         self::assertEquals('2', $result);
         $result = $manager->getDistance('2', '3');
@@ -55,9 +55,25 @@ class DayOneManagerTest extends TestCase
             '3   9',
             '3   3',
         ];
-        $manager = new DayOneManager(new FileReader(new Filesystem()));
+        $manager = new DayOneManager(new FileReader(new Filesystem()), 'kernelProjectDir');
         $result = $manager->getTotalDistance($input);
 
         self::assertEquals(11, $result);
+    }
+
+    public function testGetSimilarityScore(): void
+    {
+        $input = [
+            '3   4',
+            '4   3',
+            '2   5',
+            '1   3',
+            '3   9',
+            '3   3',
+        ];
+        $manager = new DayOneManager(new FileReader(new Filesystem()), 'kernelProjectDir');
+        $result = $manager->getSimilarityScore($input);
+
+        self::assertEquals(31, $result);
     }
 }

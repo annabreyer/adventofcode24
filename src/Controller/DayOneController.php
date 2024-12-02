@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DayOneController extends AbstractController
 {
-    #[Route('/day/one', name: 'app_day_one')]
+    #[Route('/day/1', name: 'app_day_one')]
     public function index(DayOneManager $dayOneManager): Response
     {
         $result = $dayOneManager->getResult();
