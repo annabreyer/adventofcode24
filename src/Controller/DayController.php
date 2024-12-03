@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Manager\DayOneManager;
+use App\Manager\DayThreeManager;
 use App\Manager\DayTwoManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,17 @@ class DayController extends AbstractController
     public function dayTwo(DayTwoManager $dayTwoManager): Response
     {
         $result = $dayTwoManager->getResult();
+
+        return $this->render('index.html.twig', [
+            'day' => 1,
+            'result' => $result,
+        ]);
+    }
+
+    #[Route('/day/3', name: 'app_day_three')]
+    public function dayThree(DayThreeManager $dayThreeManager): Response
+    {
+        $result = $dayThreeManager->getResult();
 
         return $this->render('index.html.twig', [
             'day' => 1,

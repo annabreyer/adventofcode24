@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Service;
 
@@ -18,7 +18,9 @@ readonly class FileReader
             throw new \Exception('File not found');
         }
 
-        return explode(',', file_get_contents($filePath));
+        $content           = $this->readFile($filePath);
+
+        return explode(',', $content);
     }
 
     public function readNewLineSeperatedFile(string $filePath): array
@@ -27,9 +29,14 @@ readonly class FileReader
             throw new \Exception('File not found');
         }
 
-        $content = file_get_contents($filePath);
+        $content           = $this->readFile($filePath);
         $normalizedContent = str_replace(["\r\n", "\r"], "\n", $content);
 
         return explode("\n", $normalizedContent);
+    }
+
+    public function readFile($filePath): string
+    {
+        return file_get_contents($filePath);
     }
 }
