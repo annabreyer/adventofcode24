@@ -14,7 +14,7 @@ class DayThreeManager
     {
         $input     = $this->fileReader->readFile($this->kernelProjectDir . '/data/days/3/input.txt');
         $result[0] = $this->getProgramOutput($input);
-        $result[1] = 0;
+        $result[1] = $this->getProgramOutputWithEnablers($input);
 
         return $result;
     }
@@ -26,6 +26,33 @@ class DayThreeManager
         foreach ($multiplications as $multiplication) {
             $numbers = $this->getNumbersFromInstruction($multiplication);
             $result += $numbers[0] * $numbers[1];
+        }
+
+        return $result;
+    }
+
+
+    public function getProgramOutputWithEnablers(string $instructions): int
+    {
+        $multiplications = $this->cleanInstructionsWithEnabler($instructions);
+        $result = 0;
+        $enable = true;
+
+        foreach ($multiplications as $multiplication) {
+            if ($multiplication === 'do()') {
+                $enable = true;
+            }
+            if ($multiplication === 'don\'t()') {
+                $enable = false;
+            }
+
+            if ($enable){
+                $numbers = $this->getNumbersFromInstruction($multiplication);
+                if (false ===  empty($numbers)){
+                    $result += $numbers[0] * $numbers[1];
+                }
+            }
+
         }
 
         return $result;
@@ -54,7 +81,17 @@ class DayThreeManager
 
         // Return an empty array if no match is found
         return [];
+    }
 
+    public function cleanInstructionsWithEnabler(string $instructions): array
+    {
+        $pattern = '/(mul\(\d{1,3},\d{1,3}\)|do\(\)|don\'t\(\))/';
+
+        // Find all matches
+        preg_match_all($pattern, $instructions, $matches);
+
+        // Join the valid instructions with a space (or other separator, if needed)
+        return $matches[0];
     }
 
 }

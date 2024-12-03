@@ -37,4 +37,22 @@ class DayThreeManagerTest extends TestCase
 
         self::assertSame(161, $result);
     }
+
+    public function testCleanInstructionsWithEnabler(): void
+    {
+        $input = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))";
+        $manager = new DayThreeManager(new FileReader(new Filesystem()), 'kernelProjectDir');
+        $cleanInstructions = $manager->cleanInstructionsWithEnabler($input);
+
+        self::assertSame(['mul(2,4)', "don't()", 'mul(5,5)',  'mul(11,8)', 'do()', 'mul(8,5)'], $cleanInstructions);
+    }
+
+    public function testGetProgramOutputWithEnablers(): void
+    {
+        $input = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))";
+        $manager = new DayThreeManager(new FileReader(new Filesystem()), 'kernelProjectDir');
+        $result = $manager->getProgramOutputWithEnablers($input);
+
+        self::assertEquals(48, $result);
+    }
 }
