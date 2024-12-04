@@ -45,7 +45,6 @@ class DayController extends AbstractController
         ]);
     }
 
-
     #[Route('/day/4', name: 'app_day_four')]
     public function dayFour(DayFourManager $dayFourManager): Response
     {

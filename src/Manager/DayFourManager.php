@@ -16,54 +16,53 @@ class DayFourManager
     {
         $input = $this->fileReader->readNewLineSeperatedFile($this->kernelProjectDir.'/data/days/4/input.txt');
         $result[0] = $this->getXmasCount($input);
-        $result[1] = 0;
+        $result[1] = $this->getCrossCount($input);
 
         return $result;
     }
-
 
     public function getXmasCount(array $input): int
     {
         $count = 0;
         $grid = $this->transformInputInGrid($input);
 
-        foreach ($grid as $y => $line){
-            foreach ($line as $x => $letter){
-                if ('X' !== $letter){
+        foreach ($grid as $y => $line) {
+            foreach ($line as $x => $letter) {
+                if ('X' !== $letter) {
                     continue;
                 }
 
                 $coordinates = ['x' => $x, 'y' => $y];
-                if ($this->isXmasWrittenDiagonallyDownwardsLeft($grid, $coordinates)){
-                    $count++;
+                if ($this->isXmasWrittenDiagonallyDownwardsLeft($grid, $coordinates)) {
+                    ++$count;
                 }
 
-                if ($this->isXmasWrittenDiagonallyDownwardsRight($grid, $coordinates)){
-                    $count++;
+                if ($this->isXmasWrittenDiagonallyDownwardsRight($grid, $coordinates)) {
+                    ++$count;
                 }
 
-                if ($this->isXmasWrittenDiagonallyUpwardsLeft($grid, $coordinates)){
-                    $count++;
+                if ($this->isXmasWrittenDiagonallyUpwardsLeft($grid, $coordinates)) {
+                    ++$count;
                 }
 
-                if ($this->isXmasWrittenDiagonallyUpwardsRight($grid, $coordinates)){
-                    $count++;
+                if ($this->isXmasWrittenDiagonallyUpwardsRight($grid, $coordinates)) {
+                    ++$count;
                 }
 
-                if ($this->isXmasWrittenDownwards($grid, $coordinates)){
-                    $count++;
+                if ($this->isXmasWrittenDownwards($grid, $coordinates)) {
+                    ++$count;
                 }
 
-                if ($this->isXmasWrittenUpwards($grid, $coordinates)){
-                    $count++;
+                if ($this->isXmasWrittenUpwards($grid, $coordinates)) {
+                    ++$count;
                 }
 
-                if ($this->isXmasWrittenLeftToRight($grid, $coordinates)){
-                    $count++;
+                if ($this->isXmasWrittenLeftToRight($grid, $coordinates)) {
+                    ++$count;
                 }
 
-                if ($this->isXmasWrittenRightToLeft($grid, $coordinates)){
-                    $count++;
+                if ($this->isXmasWrittenRightToLeft($grid, $coordinates)) {
+                    ++$count;
                 }
             }
         }
@@ -71,7 +70,25 @@ class DayFourManager
         return $count;
     }
 
+    public function getCrossCount(array $input): int
+    {
+        $grid = $this->transformInputInGrid($input);
+        $count = 0;
 
+        foreach ($grid as $y => $line) {
+            foreach ($line as $x => $letter) {
+                if ('A' !== $letter) {
+                    continue;
+                }
+
+                if ($this->isCenterOfMasCross($grid, ['x' => $x, 'y' => $y])) {
+                    ++$count;
+                }
+            }
+        }
+
+        return $count;
+    }
 
     public function transformInputInGrid(array $input): array
     {
@@ -83,43 +100,24 @@ class DayFourManager
         return $grid;
     }
 
-    public function getFirstXCoordinates(array $grid): array
-    {
-        $coordinates = [
-            'x' => null,
-            'y' => null,
-        ];
-
-        foreach ($grid as $key => $line) {
-            $xCoordinate = array_search('X', $line);
-            if (false !== $xCoordinate) {
-                $coordinates['x'] = $xCoordinate;
-                $coordinates['y'] = $key;
-                break;
-            }
-        }
-
-        return $coordinates;
-    }
-
     public function isXmasWrittenLeftToRight(array $grid, array $xCoordinates): bool
     {
         $line = $grid[$xCoordinates['y']];
         $x = $xCoordinates['x'];
 
-        if (false === isset($line[$x+3])) {
+        if (false === isset($line[$x + 3])) {
             return false;
         }
 
-        if (isset($line[$x+1]) && $line[$x+1] !== 'M') {
+        if (isset($line[$x + 1]) && 'M' !== $line[$x + 1]) {
             return false;
         }
 
-        if (isset($line[$x+2]) && $line[$x+2] !== 'A') {
+        if (isset($line[$x + 2]) && 'A' !== $line[$x + 2]) {
             return false;
         }
 
-        if (isset($line[$x+3]) && $line[$x+3] !== 'S') {
+        if (isset($line[$x + 3]) && 'S' !== $line[$x + 3]) {
             return false;
         }
 
@@ -131,19 +129,19 @@ class DayFourManager
         $line = $grid[$xCoordinates['y']];
         $x = $xCoordinates['x'];
 
-        if (false === isset($line[$x-3])) {
+        if (false === isset($line[$x - 3])) {
             return false;
         }
 
-        if (isset($line[$x-1]) && $line[$x-1] !== 'M') {
+        if (isset($line[$x - 1]) && 'M' !== $line[$x - 1]) {
             return false;
         }
 
-        if (isset($line[$x-2]) && $line[$x-2] !== 'A') {
+        if (isset($line[$x - 2]) && 'A' !== $line[$x - 2]) {
             return false;
         }
 
-        if (isset($line[$x-3]) && $line[$x-3] !== 'S') {
+        if (isset($line[$x - 3]) && 'S' !== $line[$x - 3]) {
             return false;
         }
 
@@ -155,19 +153,19 @@ class DayFourManager
         $x = $xCoordinates['x'];
         $y = $xCoordinates['y'];
 
-        if (false === isset($grid[$y-3])) {
+        if (false === isset($grid[$y - 3])) {
             return false;
         }
 
-        if (isset($grid[$y-1][$x]) && $grid[$y-1][$x] !== 'M') {
+        if (isset($grid[$y - 1][$x]) && 'M' !== $grid[$y - 1][$x]) {
             return false;
         }
 
-        if (isset($grid[$y-2][$x]) && $grid[$y-2][$x] !== 'A') {
+        if (isset($grid[$y - 2][$x]) && 'A' !== $grid[$y - 2][$x]) {
             return false;
         }
 
-        if (isset($grid[$y-3][$x]) && $grid[$y-3][$x] !== 'S') {
+        if (isset($grid[$y - 3][$x]) && 'S' !== $grid[$y - 3][$x]) {
             return false;
         }
 
@@ -179,20 +177,19 @@ class DayFourManager
         $x = $xCoordinates['x'];
         $y = $xCoordinates['y'];
 
-
-        if (false === isset($grid[$y+3])) {
+        if (false === isset($grid[$y + 3])) {
             return false;
         }
 
-        if (isset($grid[$y+1][$x]) && $grid[$y+1][$x] !== 'M') {
+        if (isset($grid[$y + 1][$x]) && 'M' !== $grid[$y + 1][$x]) {
             return false;
         }
 
-        if (isset($grid[$y+2][$x]) && $grid[$y+2][$x] !== 'A') {
+        if (isset($grid[$y + 2][$x]) && 'A' !== $grid[$y + 2][$x]) {
             return false;
         }
 
-        if (isset($grid[$y+3][$x]) && $grid[$y+3][$x] !== 'S') {
+        if (isset($grid[$y + 3][$x]) && 'S' !== $grid[$y + 3][$x]) {
             return false;
         }
 
@@ -204,19 +201,19 @@ class DayFourManager
         $x = $xCoordinates['x'];
         $y = $xCoordinates['y'];
 
-        if (false === isset($grid[$y-3][$x+3])) {
+        if (false === isset($grid[$y - 3][$x + 3])) {
             return false;
         }
 
-        if (isset($grid[$y-1][$x+1]) && $grid[$y-1][$x+1] !== 'M') {
+        if (isset($grid[$y - 1][$x + 1]) && 'M' !== $grid[$y - 1][$x + 1]) {
             return false;
         }
 
-        if (isset($grid[$y-2][$x+2]) && $grid[$y-2][$x+2] !== 'A') {
+        if (isset($grid[$y - 2][$x + 2]) && 'A' !== $grid[$y - 2][$x + 2]) {
             return false;
         }
 
-        if (isset($grid[$y-3][$x+3]) && $grid[$y-3][$x+3] !== 'S') {
+        if (isset($grid[$y - 3][$x + 3]) && 'S' !== $grid[$y - 3][$x + 3]) {
             return false;
         }
 
@@ -228,19 +225,19 @@ class DayFourManager
         $x = $xCoordinates['x'];
         $y = $xCoordinates['y'];
 
-        if (false === isset($grid[$y-3][$x-3])) {
+        if (false === isset($grid[$y - 3][$x - 3])) {
             return false;
         }
 
-        if (isset($grid[$y-1][$x-1]) && $grid[$y-1][$x-1] !== 'M') {
+        if (isset($grid[$y - 1][$x - 1]) && 'M' !== $grid[$y - 1][$x - 1]) {
             return false;
         }
 
-        if (isset($grid[$y-2][$x-2]) && $grid[$y-2][$x-2] !== 'A') {
+        if (isset($grid[$y - 2][$x - 2]) && 'A' !== $grid[$y - 2][$x - 2]) {
             return false;
         }
 
-        if (isset($grid[$y-3][$x-3]) && $grid[$y-3][$x-3] !== 'S') {
+        if (isset($grid[$y - 3][$x - 3]) && 'S' !== $grid[$y - 3][$x - 3]) {
             return false;
         }
 
@@ -252,19 +249,19 @@ class DayFourManager
         $x = $xCoordinates['x'];
         $y = $xCoordinates['y'];
 
-        if (false === isset($grid[$y+3][$x+3])) {
+        if (false === isset($grid[$y + 3][$x + 3])) {
             return false;
         }
 
-        if (isset($grid[$y+1][$x+1]) && $grid[$y+1][$x+1] !== 'M') {
+        if (isset($grid[$y + 1][$x + 1]) && 'M' !== $grid[$y + 1][$x + 1]) {
             return false;
         }
 
-        if (isset($grid[$y+2][$x+2]) && $grid[$y+2][$x+2] !== 'A') {
+        if (isset($grid[$y + 2][$x + 2]) && 'A' !== $grid[$y + 2][$x + 2]) {
             return false;
         }
 
-        if (isset($grid[$y+3][$x+3]) && $grid[$y+3][$x+3] !== 'S') {
+        if (isset($grid[$y + 3][$x + 3]) && 'S' !== $grid[$y + 3][$x + 3]) {
             return false;
         }
 
@@ -276,22 +273,51 @@ class DayFourManager
         $x = $xCoordinates['x'];
         $y = $xCoordinates['y'];
 
-        if (false === isset($grid[$y+3][$x-3])) {
+        if (false === isset($grid[$y + 3][$x - 3])) {
             return false;
         }
 
-        if (isset($grid[$y+1][$x-1]) && $grid[$y+1][$x-1] !== 'M') {
+        if (isset($grid[$y + 1][$x - 1]) && 'M' !== $grid[$y + 1][$x - 1]) {
             return false;
         }
 
-        if (isset($grid[$y+2][$x-2]) && $grid[$y+2][$x-2] !== 'A') {
+        if (isset($grid[$y + 2][$x - 2]) && 'A' !== $grid[$y + 2][$x - 2]) {
             return false;
         }
 
-        if (isset($grid[$y+3][$x-3]) && $grid[$y+3][$x-3] !== 'S') {
+        if (isset($grid[$y + 3][$x - 3]) && 'S' !== $grid[$y + 3][$x - 3]) {
             return false;
         }
 
         return true;
+    }
+
+    public function isCenterOfMasCross(array $grid, array $aCoordinates): bool
+    {
+        $x = $aCoordinates['x'];
+        $y = $aCoordinates['y'];
+
+        if (false === isset($grid[$y + 1][$x + 1]) || false === isset($grid[$y - 1][$x - 1])) {
+            return false;
+        }
+
+        $leftToRight = false;
+        $rightToLeft = false;
+
+        if (
+            ('M' === $grid[$y - 1][$x - 1] && 'S' === $grid[$y + 1][$x + 1]) // MAS
+            || ('S' === $grid[$y - 1][$x - 1] && 'M' === $grid[$y + 1][$x + 1]) // SAM
+        ) {
+            $leftToRight = true;
+        }
+
+        if (
+            ('S' === $grid[$y + 1][$x - 1] && 'M' === $grid[$y - 1][$x + 1])
+            || ('M' === $grid[$y + 1][$x - 1] && 'S' === $grid[$y - 1][$x + 1])
+        ) {
+            $rightToLeft = true;
+        }
+
+        return $rightToLeft && $leftToRight;
     }
 }

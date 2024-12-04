@@ -14,7 +14,7 @@ class DayOneManager
 
     public function getResult(): array
     {
-        $input = $this->fileReader->readNewLineSeperatedFile($this->kernelProjectDir . '/data/days/1/input.txt');
+        $input = $this->fileReader->readNewLineSeperatedFile($this->kernelProjectDir.'/data/days/1/input.txt');
         $result[0] = $this->getTotalDistance($input);
         $result[1] = $this->getSimilarityScore($input);
 
@@ -38,7 +38,7 @@ class DayOneManager
 
     public function getDistance(string $locationOne, string $locationTwo): int
     {
-        $difference = (int)bcsub($locationOne, $locationTwo);
+        $difference = (int) bcsub($locationOne, $locationTwo);
         $distance = abs($difference);
 
         return $distance;
@@ -50,7 +50,6 @@ class DayOneManager
         $firstList = $locationLists[0];
         $secondList = $locationLists[1];
         $result = 0;
-
 
         foreach ($firstList as $key => $firstLocation) {
             $result += $this->getDistance($firstLocation, $secondList[$key]);
@@ -77,10 +76,5 @@ class DayOneManager
         }
 
         return $score;
-
     }
-
-
-
-
 }

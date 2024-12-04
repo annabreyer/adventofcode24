@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Service;
 
@@ -18,7 +18,7 @@ readonly class FileReader
             throw new \Exception('File not found');
         }
 
-        $content           = $this->readFile($filePath);
+        $content = $this->readFile($filePath);
 
         return explode(',', $content);
     }
@@ -29,7 +29,7 @@ readonly class FileReader
             throw new \Exception('File not found');
         }
 
-        $content           = $this->readFile($filePath);
+        $content = $this->readFile($filePath);
         $normalizedContent = str_replace(["\r\n", "\r"], "\n", $content);
 
         return explode("\n", $normalizedContent);

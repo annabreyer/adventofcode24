@@ -46,14 +46,6 @@ class DayFourManagerTest extends TestCase
         self::assertSame(self::GRID, $grid);
     }
 
-    public function testGetNextXCoordinatesFindsFirstX(): void
-    {
-        $manager = new DayFourManager(new FileReader(new Filesystem()), 'kernelProjectDir');
-        $coordinates = $manager->getFirstXCoordinates(self::GRID);
-
-        self::assertSame(['x' => 4, 'y' => 0], $coordinates);
-    }
-
     public function testIsXmasWrittenLeftToRightReturnsTrue(): void
     {
         $manager = new DayFourManager(new FileReader(new Filesystem()), 'kernelProjectDir');
@@ -219,5 +211,40 @@ class DayFourManagerTest extends TestCase
         $result = $manager->getXmasCount(self::INPUT);
 
         $this->assertSame(18, $result);
+    }
+
+    public function testIsCenterOfMasCross(): void
+    {
+        $grid = [
+            ['M', '.', 'S'],
+            ['.', 'A', '.'],
+            ['M', '.', 'S'],
+        ];
+
+        $manager = new DayFourManager(new FileReader(new Filesystem()), 'kernelProjectDir');
+        $result = $manager->isCenterOfMasCross($grid, ['x' => 1, 'y' => 1]);
+
+        self::assertTrue($result);
+    }
+
+    public function testGetMasCrossCount(): void
+    {
+        $input = [
+            '.M.S......',
+            '..A..MSMS.',
+            '.M.S.MAA..',
+            '..A.ASMSM.',
+            '.M.S.M....',
+            '..........',
+            'S.S.S.S.S.',
+            '.A.A.A.A..',
+            'M.M.M.M.M.',
+            '..........',
+        ];
+
+        $manager = new DayFourManager(new FileReader(new Filesystem()), 'kernelProjectDir');
+        $result = $manager->getCrossCount($input);
+
+        self::assertSame(9, $result);
     }
 }

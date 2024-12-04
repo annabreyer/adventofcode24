@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Manager;
 
@@ -12,7 +14,7 @@ class DayThreeManager
 
     public function getResult(): array
     {
-        $input     = $this->fileReader->readFile($this->kernelProjectDir . '/data/days/3/input.txt');
+        $input = $this->fileReader->readFile($this->kernelProjectDir.'/data/days/3/input.txt');
         $result[0] = $this->getProgramOutput($input);
         $result[1] = $this->getProgramOutputWithEnablers($input);
 
@@ -31,7 +33,6 @@ class DayThreeManager
         return $result;
     }
 
-
     public function getProgramOutputWithEnablers(string $instructions): int
     {
         $multiplications = $this->cleanInstructionsWithEnabler($instructions);
@@ -39,20 +40,19 @@ class DayThreeManager
         $enable = true;
 
         foreach ($multiplications as $multiplication) {
-            if ($multiplication === 'do()') {
+            if ('do()' === $multiplication) {
                 $enable = true;
             }
-            if ($multiplication === 'don\'t()') {
+            if ('don\'t()' === $multiplication) {
                 $enable = false;
             }
 
-            if ($enable){
+            if ($enable) {
                 $numbers = $this->getNumbersFromInstruction($multiplication);
-                if (false ===  empty($numbers)){
+                if (false === empty($numbers)) {
                     $result += $numbers[0] * $numbers[1];
                 }
             }
-
         }
 
         return $result;
@@ -60,7 +60,7 @@ class DayThreeManager
 
     public function cleanInstructions(string $instructions): array
     {
-       // Match valid `mul(X,Y)` where X and Y are 1-3 digit numbers
+        // Match valid `mul(X,Y)` where X and Y are 1-3 digit numbers
         $pattern = '/mul\(\d{1,3},\d{1,3}\)/';
 
         // Find all matches
@@ -76,7 +76,7 @@ class DayThreeManager
 
         if (preg_match($pattern, $multiplication, $matches)) {
             // $matches[1] and $matches[2] contain the two numbers
-            return [(int)$matches[1], (int)$matches[2]];
+            return [(int) $matches[1], (int) $matches[2]];
         }
 
         // Return an empty array if no match is found
@@ -93,5 +93,4 @@ class DayThreeManager
         // Join the valid instructions with a space (or other separator, if needed)
         return $matches[0];
     }
-
 }
