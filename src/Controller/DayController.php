@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Manager\DayFiveManager;
 use App\Manager\DayFourManager;
 use App\Manager\DayOneManager;
 use App\Manager\DayThreeManager;
@@ -49,6 +50,17 @@ class DayController extends AbstractController
     public function dayFour(DayFourManager $dayFourManager): Response
     {
         $result = $dayFourManager->getResult();
+
+        return $this->render('index.html.twig', [
+            'day' => 1,
+            'result' => $result,
+        ]);
+    }
+
+    #[Route('/day/5', name: 'app_day_five')]
+    public function dayFive(DayFiveManager $manager): Response
+    {
+        $result = $manager->getResult();
 
         return $this->render('index.html.twig', [
             'day' => 1,
